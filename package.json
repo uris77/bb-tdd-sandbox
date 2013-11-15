@@ -1,0 +1,17 @@
+{
+  "name": "expressjs",
+  "version": "0.0.1",
+  "description": "Playing with expressjs.",
+  "main": "index.js",
+  "dependencies": {
+    "grunt": "~0.4.1"
+  },
+  "devDependencies": {
+    "grunt-express": "~1.2.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Roberto Guerra",
+  "license": "GPLv3"
+}
