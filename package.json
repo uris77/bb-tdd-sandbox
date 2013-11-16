@@ -4,10 +4,17 @@
   "description": "Playing with expressjs.",
   "main": "index.js",
   "dependencies": {
-    "grunt": "~0.4.1"
+    "grunt": "~0.4.1",
+    "express": "~3.4.4",
+    "node-rest-client": "~0.7.0",
+    "moment": "~2.4.0",
+    "grunt-contrib-copy": "~0.4.1",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-coffee": "~0.7.0",
+    "grunt-contrib-handlebars": "~0.6.0"
   },
   "devDependencies": {
-    "grunt-express": "~1.2.1"
+    "grunt-express-server": "~0.4.5"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -1,0 +1,20 @@
+{
+  "name": "expressjs",
+  "version": "0.0.1",
+  "description": "Sample",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "backbone.marionette": "~1.2.3",
+    "jquery": "~2.0.3",
+    "chai-backbone": "*",
+    "bootstrap": "~3.0.2"
+  }
+}
