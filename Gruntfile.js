@@ -9,7 +9,8 @@ module.exports = function (grunt) {
         'grunt-contrib-handlebars',
         'grunt-contrib-clean',
         'grunt-contrib-coffee',
-        'grunt-contrib-testem'
+        'grunt-contrib-testem',
+        'grunt-contrib-copy'
     ].forEach(grunt.loadNpmTasks);
 
     var
@@ -22,6 +23,11 @@ module.exports = function (grunt) {
         coffeeSrc = grunt.file.expandMapping(['src/js/**/*.coffee'], 'build/js/', {
             rename: function (destBase, destPath) {
                     return destPath.replace('src/js', destBase).replace(/\.coffee$/, '.js');
+                }
+        }),
+        coffeeSpecs = grunt.file.expandMapping(['specs/js/app/**/*.coffee'], 'build/specs/', {
+            rename: function (destBase, destPath) {
+                    return destPath.replace('specs/js/app', destBase).replace(/\.coffee$/, '.js');
                 }
         });
 
@@ -55,6 +61,9 @@ module.exports = function (grunt) {
         coffee: {
             build: {
                 files: coffeeSrc
+            },
+            specs: {
+                files: coffeeSpecs
             }
         },
         //------------ END CoffeeScript -------------------
@@ -76,6 +85,22 @@ module.exports = function (grunt) {
         },
         //------------ END Testem -------------------
         
+       
+        //------------ BEGIN Copy -------------------
+        copy: {
+            publicHtml: {
+                files: [
+                    {expand: false, flatten: false, filter: 'isFile', src: ['src/index.html'], dest: 'build/index.html'}
+                ]
+            },
+            mainJs: {
+                files: [
+                    {expand: false, flatten: false, filter: 'isFile', src: ['src/js/Main.js'], dest: 'build/js/Main.js'}
+                ]
+            }
+        },
+        //------------ END Copy ---------------------
+        
         //------------ BEGIN Clean -------------------
         clean: {
             build: ['build']
@@ -89,6 +114,18 @@ module.exports = function (grunt) {
         'handlebars:build',
         'Build handlebars templates',
         ['handlebars:buildTemplates']
+    );
+
+    grunt.registerTask(
+        'run',
+        'Run the application.',
+        ['coffee:build']
+    );
+
+    grunt.registerTask(
+        'specs',
+        'Run specs',
+        ['coffee', 'testem:environment']
     );
     //--------------- END TASKS -------------------------
 };
