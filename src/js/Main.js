@@ -9,7 +9,8 @@ require.config({
         underscore: '../underscore/underscore',
         backbone: '../backbone/backbone',
         marionette: '../backbone.marionette/lib/backbone.marionette',
-        handlebars_runtime: '../handlebars/handlebars.runtime'
+        handlebars: '../handlebars/handlebars',
+        handlebars_runtime: '../handlebars/handlebars_runtime'
     },
 
     shim: {
@@ -22,7 +23,8 @@ require.config({
         marionette: {
             deps: ['backbone'],
             exports: 'Marionette'
-        }
+        },
+        handlebars: { exports: 'Handlebars' }
     },
 
     packages: [
@@ -36,11 +38,21 @@ require.config({
             location: '../q',
             main: 'q'
         }
+/*
+        {
+            name: 'handlebars',
+            location: '../handlebars',
+            main: 'handlebars.amd'
+        },
+        {
+            name: 'handlebars_runtime',
+            location: '../handlebars',
+            main: 'handlebars.runtime.amd'
+        }*/
     ]
 });
 
-require(['backbone', 'marionette'], function (Backbone, Marionette) {
-    var aModel = new Backbone.Model({name: 'Ramones'});
-    console.info("A model: ");
-    console.info(aModel);
+require(['App'], function (App) {
+    App.start();
 });
+

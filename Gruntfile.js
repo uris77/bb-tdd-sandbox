@@ -10,7 +10,9 @@ module.exports = function (grunt) {
         'grunt-contrib-clean',
         'grunt-contrib-coffee',
         'grunt-contrib-testem',
-        'grunt-contrib-copy'
+        'grunt-contrib-copy',
+        'grunt-shell',
+        'grunt-contrib-watch'
     ].forEach(grunt.loadNpmTasks);
 
     var
@@ -25,7 +27,7 @@ module.exports = function (grunt) {
                     return destPath.replace('src/js', destBase).replace(/\.coffee$/, '.js');
                 }
         }),
-        coffeeSpecs = grunt.file.expandMapping(['specs/js/app/**/*.coffee'], 'build/specs/', {
+        coffeeSpecs = grunt.file.expandMapping(['specs/js/app/**/*.coffee'], 'build/js/specs/', {
             rename: function (destBase, destPath) {
                     return destPath.replace('specs/js/app', destBase).replace(/\.coffee$/, '.js');
                 }
@@ -39,6 +41,13 @@ module.exports = function (grunt) {
                 options: {
                     script: './config/server.js'
                 }
+            },
+            test: {
+                options: {
+                    script: './config/server.js',
+                    nospawn: true,
+                    delay: 5
+                }
             }
         },
         //------------ END Expressjs -------------------
@@ -47,10 +56,13 @@ module.exports = function (grunt) {
         handlebars: {
             buildTemplates: {
                 options: {
-                    namespace: false,
+                    namespace: 'JST',
                     amd: true,
                     commonjs: false,
-                    wrapped: false
+                    processName: function (filePath) {
+                        var pieces = filePath.split('/');
+                        return pieces[pieces.length - 1];
+                    }
                 },
                 files: handlebarTemplates
             }
@@ -68,24 +80,38 @@ module.exports = function (grunt) {
         },
         //------------ END CoffeeScript -------------------
         
-        //------------ BEGIN Testem -------------------
-        testem: {
-            environment: {
-                src: [
-                    'build/specs/main.js'
-                ],
-                debug: true,
+        //------------ BEGIN mocha-phantomjs -------------------
+        shell: {
+            'mocha-phantomjs': {
+                command: 'node_modules/mocha-phantomjs/bin/mocha-phantomjs http://localhost:9090/testRunner.html',
                 options: {
-                    parallel: 8,
-                    launch_in_ci: ['PhantomJS', 'Chrome'],
-                    launch_in_dev: ['PhantomJS'],
-                    framework: 'mocha'
+                    stdout: true,
+                    stderr: true
+                }
+            },
+            express: {
+                command: 'grunt express:develop',
+                options: {
+                    stdout: true,
+                    stderr: true
                 }
             }
         },
-        //------------ END Testem -------------------
-        
+        //------------ END mocha-phantomjs -------------------
        
+        //------------ BEGIN Watch -------------------
+        watch: {
+            specsJs: {
+                files: ['src/js/**/*.coffee', 'build/js/specs/**/*.js', 'specs/js/**/*.coffee'],
+                tasks: ['coffee', 'shell:mocha-phantomjs']
+            },
+            specs: {
+                files: ['specs/js/**/*.coffee'],
+                tasks: ['coffee:specs', 'copy:specs']
+            }
+        },
+        //------------ END Watch -------------------
+        
         //------------ BEGIN Copy -------------------
         copy: {
             publicHtml: {
@@ -96,6 +122,13 @@ module.exports = function (grunt) {
             mainJs: {
                 files: [
                     {expand: false, flatten: false, filter: 'isFile', src: ['src/js/Main.js'], dest: 'build/js/Main.js'}
+                ]
+            },
+            specs: {
+                files: [
+                    {expand: false, flatten: false, filter: 'isFile', src: ['specs/js/Main.js'], dest: 'build/js/Main.js'},
+                    {expand: false, flatten: false, filter: 'isFile', src: ['specs/testRunner.html'], dest: 'build/testRunner.html'},
+                    {expand: false, flatten: false, filter: 'isFile', src: ['src/specs.html'], dest: 'build/specs.html'}
                 ]
             }
         },
@@ -119,13 +152,13 @@ module.exports = function (grunt) {
     grunt.registerTask(
         'run',
         'Run the application.',
-        ['coffee:build']
+        ['clean', 'coffee:build', 'handlebars', 'copy:publicHtml', 'copy:mainJs', 'express:develop']
     );
 
     grunt.registerTask(
         'specs',
         'Run specs',
-        ['coffee', 'testem:environment']
+        ['clean', 'coffee', 'copy:specs', 'express:test', 'shell:mocha-phantomjs', 'watch:specsJs']
     );
     //--------------- END TASKS -------------------------
 };
