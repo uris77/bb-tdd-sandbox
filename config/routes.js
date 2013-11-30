@@ -4,6 +4,7 @@
 /* jslint node: true */
 'use strict';
 var configRoutes;
+var user = require(process.env.HOME + '/.hodor/config').user;
 //--------------- END MODULE SCOPE VARIABLES -------------------
 
 //---------------- BEGIN PUBLIC METHODS -----------------------
@@ -15,10 +16,7 @@ configRoutes = function (app) {
 
     app.get('/user/:id', function (requrest, response) {
         response.contentType('json');
-        response.send({
-            name: 'Roberto Guerra',
-            api: '2123122'
-        });
+        response.send(user);
     });
 };
 module.exports = { configRoutes: configRoutes };

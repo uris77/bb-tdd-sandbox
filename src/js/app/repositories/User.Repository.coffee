@@ -6,11 +6,21 @@ define (require, exports, module) ->
     urlRoot: '/user'
 
   class UserRepository
-    initialize: ->
+    constructor: ->
+      @vent = _.extend {}, Backbone.Events
       @url = '/user'
 
+    onFetched: (handler) ->
+      @vent.on 'user:fetched', handler
+
     getById: (id) ->
-      user = new User(id: id)
-      Q.when(user.fetch())
+      @_user = new User(id: id)
+      Q.when(@_user.fetch())
+        .then =>
+          @vent.trigger 'user:fetched'
+          @_user
+
+    getUser: -> @_user
 
   module.exports = UserRepository
+

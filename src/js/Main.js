@@ -38,17 +38,6 @@ require.config({
             location: '../q',
             main: 'q'
         }
-/*
-        {
-            name: 'handlebars',
-            location: '../handlebars',
-            main: 'handlebars.amd'
-        },
-        {
-            name: 'handlebars_runtime',
-            location: '../handlebars',
-            main: 'handlebars.runtime.amd'
-        }*/
     ]
 });
 

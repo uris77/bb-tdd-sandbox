@@ -116,7 +116,8 @@ module.exports = function (grunt) {
         copy: {
             publicHtml: {
                 files: [
-                    {expand: false, flatten: false, filter: 'isFile', src: ['src/index.html'], dest: 'build/index.html'}
+                    {expand: false, flatten: false, filter: 'isFile', src: ['src/index.html'], dest: 'build/index.html'},
+                    {expand: false, flatten: false, filter: 'isFile', src: ['src/css/style.css'], dest: 'build/style.css'}
                 ]
             },
             mainJs: {

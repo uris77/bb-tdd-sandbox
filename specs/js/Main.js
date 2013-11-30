@@ -14,7 +14,8 @@ require.config({
         sinon: '../sinon/lib/sinon',
         spy: '../sinon/lib/sinon/spy',
         stub: '../sinon/lib/sinon/stub',
-        call: '../sinon/lib/sinon/call'
+        call: '../sinon/lib/sinon/call',
+        mock: '../sinon/lib/sinon/mock'
     },
 
     shim: {
@@ -38,6 +39,10 @@ require.config({
             exports: 'sinon'
         },
         call: {
+            deps: ['sinon'],
+            exports: 'sinon'
+        },
+        mock: {
             deps: ['sinon'],
             exports: 'sinon'
         }
@@ -72,7 +77,6 @@ var specs = ['specs/First.Spec',
     'specs/repositories/User.Repository.Spec'
     ];
 require(specs, function () {
-//require(['specs/First.Spec'], function () {
     if (typeof mochaPhantomJS !== 'undefined') {
         mochaPhantomJS.run();
     } else {

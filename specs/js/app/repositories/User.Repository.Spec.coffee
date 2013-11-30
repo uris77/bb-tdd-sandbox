@@ -16,8 +16,6 @@
         $.ajax = -> Q(simulatedServerResponse)
         userPromise = repository.getById(1)
         userPromise.then (user) ->
-          expect(user).to.have.property('id', 1)
-          expect(user).to.have.property('name', 'Roberto Guerra')
-          expect(user).to.have.property('api', 1234567)
+          expect( user.get('id') ).to.be 1
 
 ).call(@)
