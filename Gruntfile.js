@@ -39,7 +39,9 @@ module.exports = function (grunt) {
         express: {
             develop: {
                 options: {
-                    script: './config/server.js'
+                    script: './config/server.js',
+                    nospawn: true,
+                    delay: 5
                 }
             },
             test: {
@@ -103,11 +105,15 @@ module.exports = function (grunt) {
         watch: {
             specsJs: {
                 files: ['src/js/**/*.coffee', 'build/js/specs/**/*.js', 'specs/js/**/*.coffee'],
-                tasks: ['coffee', 'shell:mocha-phantomjs']
+                tasks: ['coffee', 'handlebars', 'shell:mocha-phantomjs']
             },
             specs: {
                 files: ['specs/js/**/*.coffee'],
                 tasks: ['coffee:specs', 'copy:specs']
+            },
+            run: {
+                files: ['src/js/**/*.coffee', 'src/js/templates/**/*.js'],
+                tasks: ['coffee:build', 'handlebars']
             }
         },
         //------------ END Watch -------------------
@@ -153,13 +159,13 @@ module.exports = function (grunt) {
     grunt.registerTask(
         'run',
         'Run the application.',
-        ['clean', 'coffee:build', 'handlebars', 'copy:publicHtml', 'copy:mainJs', 'express:develop']
+        ['clean', 'coffee:build', 'handlebars', 'copy:publicHtml', 'copy:mainJs', 'express:develop', 'watch:run']
     );
 
     grunt.registerTask(
         'specs',
         'Run specs',
-        ['clean', 'coffee', 'copy:specs', 'express:test', 'shell:mocha-phantomjs', 'watch:specsJs']
+        ['clean', 'coffee', 'copy:specs', 'handlebars', 'express:test', 'shell:mocha-phantomjs', 'watch:specsJs']
     );
     //--------------- END TASKS -------------------------
 };

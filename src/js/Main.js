@@ -10,7 +10,8 @@ require.config({
         backbone: '../backbone/backbone',
         marionette: '../backbone.marionette/lib/backbone.marionette',
         handlebars: '../handlebars/handlebars',
-        handlebars_runtime: '../handlebars/handlebars_runtime'
+        handlebars_runtime: '../handlebars/handlebars_runtime',
+        'backbone.wreqr': '../backbone.wreqr/lib/backbone.wreqr'
     },
 
     shim: {
@@ -23,6 +24,10 @@ require.config({
         marionette: {
             deps: ['backbone'],
             exports: 'Marionette'
+        },
+        'backbone.wreqr': {
+            deps: ['backbone'],
+            exports: 'Backbone.Wreqr'
         },
         handlebars: { exports: 'Handlebars' }
     },

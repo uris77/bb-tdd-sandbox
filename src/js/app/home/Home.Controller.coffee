@@ -1,25 +1,73 @@
 define (require, exports, module) ->
-  Marionette = require('marionette')
+  BaseController = require('base/Controller')
   HeaderView = require('app/home/header')
   TitleView = require('app/home/title')
+  MenuItems = require('app/home/MenuItems')
+  HeaderController = require('app/home/Header.Controller')
+  HeaderLayout = require('app/home/HeaderLayout')
+  BillCalculatorController = require('app/billCalculator/BillCalculator.Controller')
+  MainRouter = require('app/home/Main.Router')
 
-  class HomeController extends Marionette.Controller
+
+  class MainController extends BaseController
     initialize: (options) ->
+      super()
       @repository = options.userRepository
       @region = options.region
+      @startRouter()
       @layoutView = options.layoutView
-      @repository.onFetched =>
-        headerView = new HeaderView model: @repository.getUser()
-        @layoutView.headerRegion.show headerView
       @region.show @layoutView
-      @showTitleView()
+      @startHeader()
+      @startModule 'HOME'
+
+    startRouter: ->
+      if Backbone.history
+        Backbone.history.start
+          pushState: true
+      @mainRouter = new MainRouter()
+
 
     getTitleView: ->
-      new TitleView()
+      if @titleView
+        @titleView
+      else
+        new TitleView()
+
+    getCurrentView: -> @_currentView
+
+    getCurrentModule: -> @_currentModule
 
     showTitleView: ->
-      @layoutView.centerRegion.show @getTitleView()
+      @_currentView = @getTitleView()
+      @layoutView.centerRegion.show @_currentView
 
+    startHeader: ->
+      menuItems = new MenuItems()
+      headerController = new HeaderController
+        region: @layoutView.headerRegion
+        userRepository: @repository
+        layout: new HeaderLayout()
+        menuItems: menuItems
+      headerController.vent.on 'menu:click', @startModule
 
-  module.exports = HomeController
+    startModule: (moduleName) =>
+      if @getCurrentModule() then @stopModule @_currentModule
+      switch moduleName
+        when 'HOME'
+          @showTitleView()
+          @_currentModule = {name: moduleName, module: @getTitleView()}
+          @mainRouter.navigate '/'
+        when 'CALCULATE_BILL'
+          @_currentModule =
+            name: moduleName
+            module: new BillCalculatorController
+              region: @layoutView.centerRegion
+          @_currentView = @_currentModule.module.layout
+          @mainRouter.navigate '/bill/form'
+
+    stopModule: (module) ->
+      module.module.close()
+      delete module.module
+
+    module.exports = MainController
 

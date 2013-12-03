@@ -8,8 +8,10 @@ require.config({
         jquery: '../jquery/jquery',
         underscore: '../underscore/underscore',
         backbone: '../backbone/backbone',
-        marionette: 'backbone.marionette/lib/backbone.marionette',
-        handlebars_runtime: 'handlebars/handlebars.runtime',
+        marionette: '../backbone.marionette/lib/backbone.marionette',
+        'backbone.wreqr': '../backbone.wreqr/lib/backbone.wreqr',
+        handlebars: '../handlebars/handlebars',
+        handlebars_runtime: '../handlebars/handlebars.runtime',
         expect: 'expect/expect',
         sinon: '../sinon/lib/sinon',
         spy: '../sinon/lib/sinon/spy',
@@ -29,7 +31,12 @@ require.config({
             deps: ['backbone'],
             exports: 'Marionette'
         },
-        sinon: { export: 'sinon' },
+        'backbone.wreqr': {
+            deps: ['backbone'],
+            exports: 'Backbone.Wreqr'
+        },
+        handlebars: { exports: 'Handlebars' },
+        sinon: { exports: 'sinon' },
         spy: {
             deps: ['sinon'],
             exports: 'sinon'
@@ -74,7 +81,8 @@ require.config({
 });
 
 var specs = ['specs/First.Spec',
-    'specs/repositories/User.Repository.Spec'
+    'specs/repositories/User.Repository.Spec',
+    'specs/home/Home.Controller.Spec'
     ];
 require(specs, function () {
     if (typeof mochaPhantomJS !== 'undefined') {
