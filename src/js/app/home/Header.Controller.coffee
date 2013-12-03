@@ -2,17 +2,16 @@ define (require, exports, module) ->
   BaseController = require('base/Controller')
   RightMenuView = require('app/home/Header.RightMenu')
   MenuItemsView = require('app/home/MenuItemsView')
+  HeaderLayout = require('app/home/HeaderLayout')
 
   class HeaderController extends BaseController
     initialize: (options) ->
       super()
       @region = options.region
-      @layout = options.layout
       @menuItems = options.menuItems
       @repository = options.userRepository
-      @repository.onFetched =>
-        rightMenuView = new RightMenuView model: @repository.getUser()
-        @layout.rightHeader.show rightMenuView
+      @layout = new HeaderLayout
+      @repository.onFetched @showRightHeader 
       @region.show @layout
       @showMenuItems(@menuItems)
 
@@ -27,6 +26,10 @@ define (require, exports, module) ->
         @vent.trigger 'menu:click', menuItems.getItemKeyFor(model)
 
       @layout.leftHeader.show menuItemsView
+
+    showRightHeader: =>
+      rightMenuView = new RightMenuView model: @repository.getUser()
+      @layout.rightHeader.show rightMenuView
 
 
   module.exports = HeaderController

@@ -4,7 +4,6 @@ define (require, exports, module) ->
   TitleView = require('app/home/title')
   MenuItems = require('app/home/MenuItems')
   HeaderController = require('app/home/Header.Controller')
-  HeaderLayout = require('app/home/HeaderLayout')
   BillCalculatorController = require('app/billCalculator/BillCalculator.Controller')
   MainRouter = require('app/home/Main.Router')
 
@@ -46,7 +45,6 @@ define (require, exports, module) ->
       headerController = new HeaderController
         region: @layoutView.headerRegion
         userRepository: @repository
-        layout: new HeaderLayout()
         menuItems: menuItems
       headerController.vent.on 'menu:click', @startModule
 

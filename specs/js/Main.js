@@ -82,7 +82,8 @@ require.config({
 
 var specs = ['specs/First.Spec',
     'specs/repositories/User.Repository.Spec',
-    'specs/home/Home.Controller.Spec'
+    'specs/home/Home.Controller.Spec',
+    'specs/Header.Spec'
     ];
 require(specs, function () {
     if (typeof mochaPhantomJS !== 'undefined') {
