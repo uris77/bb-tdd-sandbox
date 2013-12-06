@@ -24,16 +24,13 @@
         afterEach ->
           @stub.restore()
 
-        it "Default module is 'HOME'", ->
-          expect( mainController.getCurrentModule().name ).to.be 'HOME'
-        it 'default url is /', ->
-          mainController.startModule 'HOME'
-          expect( @stub.calledWith('/') ).to.be true
         it 'Title view is the default view', ->
           expect( mainController.getCurrentView().$el.html() )
             .match(/Welcome to Hodor/).to.be.ok
 
-        describe 'Switch Views', ->
+        context 'Switch Views', ->
+          it "Default module is 'HOME'", ->
+            expect( mainController.getCurrentModule().name ).to.be 'HOME'
           it 'current module is changed', ->
             mainController.startModule('CALCULATE_BILL')
             expect( mainController.getCurrentModule().name ).to.be 'CALCULATE_BILL'
@@ -46,9 +43,12 @@
               expect( mainController.getCurrentView().$el.html() )
                 .match(/End Date/).to.be.ok
 
-        describe 'Router/URL', ->
+        context 'Router/URL', ->
           it 'starts Backbone history', ->
               expect( Backbone.history.start.called ).to.be.ok
+          it 'default url is /', ->
+            mainController.startModule 'HOME'
+            expect( @stub.calledWith('/') ).to.be true
           it 'url for calcuating bill form is "/bill/form"', ->
             mainController.startModule('CALCULATE_BILL')
             expect( @stub.calledWith('/bill/form') ).to.be true
