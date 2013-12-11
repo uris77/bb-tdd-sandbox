@@ -22,19 +22,21 @@ configRoutes = function (app) {
         response.send(user);
     });
 
-    app.get('/timeEntries/apiKey', function (request, resposne) {
+    app.get('/timeEntries/:apiKey', function (request, response) {
         var urlParts = url.parse(request.url, true);
         var dateFormat = 'DD-MM-YYYY';
         var IsoDateFormat = 'YYYY-MM-DD';
         var startDate = moment.utc(urlParts.query.startDate, dateFormat);
         var endDate = moment.utc(urlParts.query.endDate, dateFormat);
-        var baseUrl = 'https://wwww.toggle.com/api/v8/time_entries?';
-        var _url = baseUrl + 'start_date=' + startDate.format(IsoDateFormat) +
-            'T00:00-00-00:00&end_date=' + endDate.format(IsoDateFormat) +
-            'T23:59:59-59:59';
+        var baseUrl = 'https://www.toggl.com/api/v8/time_entries?';
+        var _url = baseUrl + 'start_date=' +
+            startDate.format(IsoDateFormat) +
+            encodeURIComponent('T00:00:00+00:00') + '&end_date=' +
+            endDate.format(IsoDateFormat) +
+             encodeURIComponent('T23:59:59+59:59');
         var options_auth = {user: request.params.apiKey, password: 'api_token'};
         var client = new RestClient(options_auth);
-        client.get(_url, function (data, response) {
+        client.get(_url, function (data, resp) {
             response.json(data);
         });
 

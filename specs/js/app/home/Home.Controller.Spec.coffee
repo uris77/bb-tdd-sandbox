@@ -3,6 +3,7 @@
       MainController = require('app/home/Home.Controller')
       UserRepository = require('app/repositories/User.Repository')
       LayoutView = require('app/home/layout')
+      MenuItems = require('app/home/MenuItems')
       sinon = require('sinon')
       require('call')
       require('stub')
@@ -10,6 +11,7 @@
       require('mock')
 
       describe 'Main Controller', ->
+        menuItems = new MenuItems
         userRepository = new UserRepository()
         region = new Marionette.Region
           el: '#content'
@@ -52,5 +54,11 @@
           it 'url for calcuating bill form is "/bill/form"', ->
             mainController.startModule('CALCULATE_BILL')
             expect( @stub.calledWith('/bill/form') ).to.be true
+
+        context 'TRYING WITH JQUERY EVENTS', ->
+          it 'works', ->
+            $("a.item:contains('#{menuItems.items.CALCULATE_BILL.get('name')}')").trigger('click')
+            expect( mainController.getCurrentModule().name ).to.be 'CALCULATE_BILL'
+
 
 ).call(@)

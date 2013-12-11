@@ -17,7 +17,9 @@ require.config({
         spy: '../sinon/lib/sinon/spy',
         stub: '../sinon/lib/sinon/stub',
         call: '../sinon/lib/sinon/call',
-        mock: '../sinon/lib/sinon/mock'
+        mock: '../sinon/lib/sinon/mock',
+        chai: '../chai/chai',
+        'chai-backbone': '../chai-backbone/chai-backbone'
     },
 
     shim: {
@@ -52,6 +54,13 @@ require.config({
         mock: {
             deps: ['sinon'],
             exports: 'sinon'
+        },
+        chai: {
+            exports: 'chai'
+        },
+        'chai-backbone': {
+            deps: ['chai'],
+            exports: 'chaiBackbone'
         }
                 
     },
